@@ -16,6 +16,9 @@
       ]
     ],
     "name": "ai-chatbot",
-    "slug": "ai-chatbot"
+    "slug": "ai-chatbot",
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }

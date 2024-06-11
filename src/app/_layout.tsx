@@ -1,6 +1,7 @@
-import "../global.css";
-import { Slot } from "expo-router";
+import "./../global.css"
+import React from 'react';
+import { Stack } from 'expo-router/stack';
 
-export default function Layout() {
-  return <Slot />;
+export default function RootLayout() {
+return <Stack screenOptions={{headerShown: false}}/>
 }

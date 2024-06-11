@@ -1,8 +1,8 @@
 {
   "expo": {
-    "scheme": "acme",
+    "scheme": "ai-chatbot",
     "userInterfaceStyle": "automatic",
-    "orientation": "default",
+    "orientation": "portrait",
     "web": {
       "output": "static",
       "bundler": "metro"

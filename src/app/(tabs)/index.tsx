@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from 'react-native'
 import React from 'react'
-import { Link, useNavigation } from 'expo-router'
+import { Link, router, useNavigation } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Octicons from 'react-native-vector-icons/Octicons'
 
@@ -22,16 +22,16 @@ const home = () => {
                 </View>
             </View>
 
-            <View className='flex-col mx-7 my-5'>
+            <View className='flex-col mx-7'>
                 <View className='flex-row justify-between items-center border-b py-5 border-b-gray-300'>
                     <View className='flex-row'>
                         <View className='h-16 w-16 rounded-full bg-gray-300'>
                             {/* Image for the models */}
                         </View>
-                        <View className='ml-3'>
+                        <Pressable className='ml-3' onPress={() => router.push('/general/chat/chat')} >
                             <Text className='font-black text-lg'>William Brown</Text>
                             <Text className='mt-2font-semibold text-gray-500'>Hello there, what is...</Text>
-                        </View>
+                        </Pressable>
                     </View>
 
                     <View>

@@ -1,7 +1,6 @@
 import { View, Text, Pressable } from 'react-native'
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Link, useNavigation } from 'expo-router'
+import { Link, router, useNavigation } from 'expo-router'
 import Feather from 'react-native-vector-icons/Feather'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -30,21 +29,21 @@ const settings = () => {
                 <View className='flex-col mx-5'>
                     <View className='flex-row items-center justify-between border-b border-b-gray-300 py-3'>
                         <Text className='font-black'>Full Name</Text>
-                        <Link href={'/editFullName'}>
+                        <Pressable onPress={()=> router.push('/general/settings/editFullName')} className='w-3/4 flex-row justify-end'>
                             <Text className='font-semibold'>John Carmack</Text>
-                        </Link>
+                        </Pressable>
                     </View>
                     <View className='flex-row justify-between border-b border-b-gray-300 py-3'>
                         <Text className='font-black'>Username</Text>
-                        <Link href={'/editUserName'} >
+                        <Pressable onPress={()=> router.push('/general/settings/editUserName')} className='w-3/4 flex-row justify-end'>
                             <Text className='font-semibold'>@johncarmack</Text>
-                        </Link>
+                        </Pressable>
                     </View>
                     <View className='flex-row justify-between items-center py-3'>
                         <Text className='font-black'>Password</Text>
-                        <Link href={'/password'} className=''>
+                        <Pressable onPress={()=> router.push('/general/settings/password')} className='w-3/4 flex-row justify-end'>
                             <Feather name='chevron-right' size={24}/>
-                        </Link>
+                        </Pressable>
                     </View>
                 </View>
             </View>

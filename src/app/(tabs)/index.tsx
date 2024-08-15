@@ -1,10 +1,60 @@
-import { View, Text, Pressable } from 'react-native'
-import React from 'react'
-import { Link, router, useNavigation } from 'expo-router'
+import { View, Text, Pressable, PermissionsAndroid } from 'react-native'
+import React, { useEffect } from 'react'
+import { Link } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Octicons from 'react-native-vector-icons/Octicons'
+import * as Notifications from "expo-notifications"
 
 const home = () => {
+
+// Request  for the camera permission
+const requestCameraPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: 'Cool Photo App Camera Permission',
+        message:
+          'Cool Photo App needs access to your camera ' +
+          'so you can take awesome pictures.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the camera');
+    } else {
+      console.log('Camera permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};
+    // Requesting Notifications access 
+    async function registerForPushNotifications() {
+        let token;
+        const { status: existingStatus  } = await Notifications.getPermissionsAsync()
+        let finalStatus = existingStatus;
+
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync()
+            finalStatus = status;
+        }
+
+        if (finalStatus !== 'granted' ){
+            alert('failed to get the push token for push notifications')
+            return
+        }
+
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+        console.log(token);
+    }
+
+    useEffect(() => {
+        registerForPushNotifications()
+    }, [])
+
     return (
         <SafeAreaView>
             <View className='flex-row justify-between m-7'>
@@ -28,7 +78,7 @@ const home = () => {
                         <View className='h-16 w-16 rounded-full bg-gray-300'>
                             {/* Image for the models */}
                         </View>
-                        <Pressable className='ml-3' onPress={() => router.push('/general/chat/chat')} >
+                        <Pressable className='ml-3' onPress={requestCameraPermission} >
                             <Text className='font-black text-lg'>William Brown</Text>
                             <Text className='mt-2font-semibold text-gray-500'>Hello there, what is...</Text>
                         </Pressable>

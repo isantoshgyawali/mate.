@@ -1,13 +1,12 @@
 import { View, Text, Pressable, PermissionsAndroid } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Octicons from 'react-native-vector-icons/Octicons'
 import * as Notifications from "expo-notifications"
-
 const home = () => {
-
 // Request  for the camera permission
+
 const requestCameraPermission = async () => {
   try {
     const granted = await PermissionsAndroid.request(

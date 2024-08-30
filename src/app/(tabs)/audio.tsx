@@ -15,10 +15,10 @@ const audio = () => {
                     <View className='h-2 w-2 bg-green-500 rounded-full'></View>
                 </View>
                 <View className='flex-row gap-x-8 items-center justify-center'>
-                    <Link href='/general/search'>
+                    <Link href='/(general)/chat'>
                         <Octicons name='search' size={20} color={'#000a'} />
                     </Link>
-                    <Link href='/general/models'>
+                    <Link href='/(general)/models'>
                         <Octicons name='people' size={24} color={'#000a'} />
                     </Link>
                 </View>

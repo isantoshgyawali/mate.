@@ -1,71 +1,55 @@
-import { View, Text, Pressable, PermissionsAndroid } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { Link } from 'expo-router'
+import { View, Text, Pressable, Platform } from 'react-native'
+import React, { useState } from 'react'
+import { Link, router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Octicons from 'react-native-vector-icons/Octicons'
-import * as Notifications from "expo-notifications"
+import { trpc } from '../trpc'
+
 const home = () => {
-// Request  for the camera permission
+    const [inputMessage, setInputMessage] = useState<string | null>()
 
-const requestCameraPermission = async () => {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-      {
-        title: 'Cool Photo App Camera Permission',
-        message:
-          'Cool Photo App needs access to your camera ' +
-          'so you can take awesome pictures.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('You can use the camera');
-    } else {
-      console.log('Camera permission denied');
-    }
-  } catch (err) {
-    console.warn(err);
-  }
-};
-    // Requesting Notifications access 
-    async function registerForPushNotifications() {
-        let token;
-        const { status: existingStatus  } = await Notifications.getPermissionsAsync()
-        let finalStatus = existingStatus;
+    //Dynamic Queries : Queries with args...
+    const {data: queryData, isLoading, error, refetch } = trpc.message.useQuery(
+        {text: inputMessage},
+    )
+    if (error) {console.log(1, error)}
+    if (isLoading) {
+        return (
+            <View className='flex-1 justify-center items-center'>
+                <Text className='font-black text-3xl'>
+                    Hello there... it isn't loading btw
+                </Text>
+            </View>
+        )
+    } 
 
-        if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync()
-            finalStatus = status;
+    //Mutation : Mutating server state
+    const { mutate: logToServer, isPending, isError } = trpc.LogToServer.useMutation({
+        onSuccess: () => {
+            refetch();
+        },
+    })
+
+    const handleMessageUpdate = () => {
+        if (inputMessage) {
+            logToServer({message: inputMessage})
         }
-
-        if (finalStatus !== 'granted' ){
-            alert('failed to get the push token for push notifications')
-            return
-        }
-
-        token = (await Notifications.getExpoPushTokenAsync()).data;
-        console.log(token);
     }
 
-    useEffect(() => {
-        registerForPushNotifications()
-    }, [])
+    
 
     return (
-        <SafeAreaView>
+        <SafeAreaView className={`${Platform.OS === "web" ? "w-1/2 self-center" : ""}`}>
             <View className='flex-row justify-between m-7'>
-                <View className='flex-row items-baseline gap-x-1.5'>
-                    <Text className='text-2xl font-black'>mate</Text>
+                <View className='flex-row items-baseline'>
+                    <Text className='text-2xl font-black mr-2'>{queryData?.greeting}</Text>
                     <View className='h-2 w-2 bg-green-500 rounded-full'></View>
                 </View>
-                <View className='flex-row gap-x-8 items-center justify-center'>
-                    <Link href='/general/search'>
+                <View className='flex-row gap-x-4 items-center justify-center'>
+                    <Link href='/(general)/search' className='mr-7'>
                         <Octicons name='search' size={20} color={'#000a'} />
                     </Link>
-                    <Link href='/general/models'>
+                    <Link href='/(general)/models'>
                         <Octicons name='people' size={24} color={'#000a'} />
                     </Link>
                 </View>
@@ -77,7 +61,8 @@ const requestCameraPermission = async () => {
                         <View className='h-16 w-16 rounded-full bg-gray-300'>
                             {/* Image for the models */}
                         </View>
-                        <Pressable className='ml-3' onPress={requestCameraPermission} >
+                        <Pressable className='ml-3' onPress={()=> {}} >
+                        {/* <Pressable className='ml-3' onPress={()=> router.push('/(general)/chat')} > */}
                             <Text className='font-black text-lg'>William Brown</Text>
                             <Text className='mt-2font-semibold text-gray-500'>Hello there, what is...</Text>
                         </Pressable>
